@@ -13,4 +13,4 @@ jobs:
         uses: actions/checkout@v3
       - name: Run the test using docker intellij-http-client image
         run: ./run.sh
-        shell: bash
+#        shell: bash
