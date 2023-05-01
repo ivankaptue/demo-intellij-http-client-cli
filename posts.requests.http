@@ -1,0 +1,52 @@
+### Création d'un post
+< {%
+  const userId = Math.floor(Math.random() * 100)
+  request.variables.set('userId', `${userId}`)
+  client.log(`Request userId ${userId}`)
+%}
+
+POST {{hostname}}/posts
+Content-Type: application/json; charset=UTF-8
+
+{
+  "userId": {{userId}},
+  "title": "{{$random.alphabetic(15)}}",
+  "body": "{{$random.alphanumeric(140)}}"
+}
+
+> {%
+  client.test('Status code must be 201', function () {
+    client.assert(response.status === 201, `response status ${response.status} is not 201`)
+  })
+  client.test('Post created with valid userId', () => {
+    const userId = request.variables.get('userId');
+    client.assert(response.body.userId == userId, `userId ${response.body.userId} is not equal to ${userId}`)
+  })
+
+  client.log(`postId ${response.body.id}`)
+  client.global.set('postId', '1')
+%}
+
+### Récupération d'un post
+GET {{hostname}}/posts/{{postId}}
+Accept: application/json
+
+> {%
+  client.test('Status code is 200', () => {
+    client.assert(response.status === 200)
+  })
+%}
+
+### Modification du titre d'un post
+PATCH {{hostname}}/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "title": "{{$random.alphabetic(15)}}"
+}
+
+> {%
+  client.test('Status code is 200', () => {
+    client.assert(response.status === 200)
+  })
+%}

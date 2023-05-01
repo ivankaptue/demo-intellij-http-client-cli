@@ -1,0 +1,13 @@
+### Read PEM file from file
+< {%
+  const privateKey = request.environment.get('privateKey')
+  client.log(`private key\n${privateKey}`)
+%}
+
+GET {{hostname}}/posts
+
+> {%
+  client.test('status code is 200', () => {
+    client.assert(response.status === 200, `status ${response.status} is not 200`)
+  })
+%}

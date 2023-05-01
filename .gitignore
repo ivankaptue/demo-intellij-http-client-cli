@@ -1,1 +1,4 @@
 .idea/
+*.pem
+http-client.private.env.json
+reports/
